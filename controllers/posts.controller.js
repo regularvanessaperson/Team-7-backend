@@ -26,6 +26,12 @@ exports.makePost = (req, res) => {
         if (err) {
             res.status(500).send({message: err})
         } 
+
+        
         res.send("Post created successfully.")
     })
+    console.log(req.body.user)
+    console.log(req.body.hashtags)
+    
+    res.send(post)
 }
