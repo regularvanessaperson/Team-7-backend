@@ -1,5 +1,6 @@
-const router = require('express').Router()
-const Post = require('../models/post.model')
+//Do we need to require router here?
+//const router = require('express').Router()
+const controller = require('../controllers/posts.controller')
 
 module.exports = function(app) {
     app.use((req,res, next)=> {
