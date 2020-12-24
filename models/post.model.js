@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const post = mongoose.model(
+const Post = mongoose.model(
     "Post",
     new mongoose.Schema({
         creator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
         // creatorThumbnail: [],
-        timestamp: Date,
+        // timestamp: Date,
         body: String,
         favorites: Number,
         favoritedBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
