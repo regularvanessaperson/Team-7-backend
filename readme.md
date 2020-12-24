@@ -1,12 +1,24 @@
 # Project Overview
-This repo is the backend for Billy, Nivedh, Ross, and Vanessa's group 3 project, Chirper. Our repo includes the models included in our app, the authentication our app uses, and the endpoints our app hits on the database we have set up.
+This repo is the backend for Billy, Nivedh, Ross, and Vanessa's group 3 project, Chirper. When thinking about what type of app we wanted to build, we quickly identified social media as an area of opportunity due to the general lack of trust with existing social media platforms.
 
-# ERD
+This repo includes the models included in our app, the authentication our app uses, and the endpoints our app hits on the database we have set up.
+
+# Link to Frontend Repo
+
+# Link to Deployed API
+
+# Installation Instructions
+- Fork & clone this repo
+- cd into local directory and `npm install` to install dependencies
+- You will need to have mongoDB installed on your computer
+
+# Approach and ERD
+The core functionality of our app involves a user making a post, so we began by defining how we wanted to associate posts and models.
 
 # Tech Stack
 - React
+- Mongoose
 - MongoDB
-- Bootstrap CSS
 
 # Routes
 Methods | URLs | Actions
