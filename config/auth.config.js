@@ -1,4 +1,3 @@
 module.exports = {
-    secret: "I-want-tacos"
-    
+    secret: "I-want-tacos"  
 }
