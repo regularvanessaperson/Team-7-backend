@@ -8,6 +8,7 @@ exports.makePost = (req, res) => {
     console.log(req.body)
     //creating post object
     const post = new Post({
+
         // creator: req.body.creator, 
         body: req.body.body,
         favorites: 0,
@@ -68,6 +69,7 @@ exports.deletePost = (req,res) => {
         if(!data)
         return res.status(400).send({message: "Unable to delete post"})
         else res.send(data)
+
     })
 }
 
@@ -95,3 +97,4 @@ exports.onePost = (req, res) => {
         else res.send(post)
     })
 }
+
