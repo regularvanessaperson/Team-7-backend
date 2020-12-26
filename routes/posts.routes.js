@@ -14,10 +14,10 @@ module.exports = function(app) {
 
 //Create a new post
 app.post("/api/posts/post", controller.makePost)
-// //Edit an existing post
+//Edit an existing post
 app.put("/api/posts/post", controller.editPost)
-// //Delete a post
-// app.put("/api/posts/post", controller.deletePost)
+//Delete a post
+app.delete("/api/posts/post", controller.deletePost)
 // //Retreive all of the posts to display on home
 // app.get("/api/posts/feed", controller.allPosts)
 // //Retreive a single post 
