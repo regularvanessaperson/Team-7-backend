@@ -5,59 +5,45 @@ const Post = db.post
 
 //make a post
 exports.makePost = (req, res) => {
-
-    const user = User.findById(req.body.creator, (err, docs) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(docs)
-        }
+    console.log(req.body)
+    //creating post object
+    const post = new Post({
+        creator: req.body.creator, 
+        body: req.body.body,
+        favorites: 0,
+        favoritedBy: [],
+        reposts: 0,
+        repostedBy: [],
+        replies: [],
+        hashtags: req.body.hashtags,
+        isRepost: false,
+        isReply: false,
+        parentPost: null
     })
-
-    // const post = new Post({
-    //     creator: user, 
-    //     body: req.body.body,
-    //     favorites: 0,
-    //     favoritedBy: [],
-    //     reposts: 0,
-    //     repostedBy: [],
-    //     replies: [],
-    //     hashtags: req.body.hashtags,
-    //     isRepost: false,
-    //     isReply: false,
-    //     parentPost: null
-    // })
-
-    // post.save((err) => {
-    //     if (err) {
-    //         res.status(500).send({message: err})
-    //     } 
-    //     res.send("Post created successfully.")
-    // })
-
-    // Find the user and add user as creator to the post
-    //     User.find({
-    //         username: { $in: req.body.creator }
-    //     }, (err, users) => {
-    //         if (err) {
-    //             res.status(500).send({ message: err })
-    //             return
-    //         }
-    //         //set the reference to the user as the creator of post
-    //         post.creator = users.map(user => user._id)
-    //         //save post to database
-    //         post.save((err) => {
-    //             if (err) {
-    //                 res.status(500).send({message: err})
-    //             } 
-    //             res.send("Post created successfully.")
-    //         })
-    //         // console.log(req.body.user)
-    //         // console.log(req.body.hashtags)
-    //         console.log(post)
-    //         //when testing is done we need to 
-    //         // res.send(post)
-    //     })
+    //Find the user and add user as creator to the post
+    
+        User.find({
+            _id: { $in: req.body.creator }
+        }, (err, users) => {
+            if (err) {
+                res.status(500).send({ message: err })
+                return
+            }
+            //set the reference to the user as the creator of post
+            post.creator = users.map(user => user._id)
+            //save post to database
+            post.save((err) => {
+                if (err) {
+                    res.status(500).send({message: err})
+                } 
+                res.send("Post created successfully.")
+            })
+            // console.log(req.body.user)
+            // console.log(req.body.hashtags)
+            console.log(post)
+            //when testing is done we need to 
+            // res.send(post)
+        })
     
 }
 
@@ -74,3 +60,13 @@ exports.editPost= (req, res) => {
 }
 
 
+//delete post
+exports.deletePost = (req,res) => {
+    const id = req.body._id
+    Post.deleteOne({_id: id})
+    .then((data)=>{
+        if(!data)
+        return res.status(400).send({message: "Unable to delete post"})
+        else res.send(data)
+    })
+}
