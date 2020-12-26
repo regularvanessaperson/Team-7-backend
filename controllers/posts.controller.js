@@ -47,7 +47,7 @@ exports.makePost = (req, res) => {
 }
 
 //edit post - to test add the _id of the post and update the post body
-exports.editPost= (req, res) =>{
+exports.editPost= (req, res) => {
     const id = req.body._id
     Post.updateOne({_id: id}, {
         body: req.body.body
@@ -58,3 +58,14 @@ exports.editPost= (req, res) =>{
     })
 }
 
+
+//delete post
+exports.deletePost = (req,res) => {
+    const id = req.body._id
+    Post.deleteOne({_id: id})
+    .then((data)=>{
+        if(!data)
+        return res.status(400).send({message: "Unable to delete post"})
+        else res.send(data)
+    })
+}
