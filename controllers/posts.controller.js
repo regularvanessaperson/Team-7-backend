@@ -6,8 +6,6 @@ const Post = db.post
 //make a post
 exports.makePost = (req, res) => {
 
-    console.log(req.body)
-
     const post = new Post({
         creator: req.body.user, 
         body: req.body.text,
@@ -25,13 +23,10 @@ exports.makePost = (req, res) => {
     post.save((err) => {
         if (err) {
             res.status(500).send({message: err})
+            return
         } 
-
         
-        res.send("Post created successfully.")
-    })
-    console.log(req.body.user)
-    console.log(req.body.hashtags)
-    
-    res.send(post)
+        res.send(post)        
+        // res.send("Post created successfully.")
+    })  
 }
