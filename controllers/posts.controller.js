@@ -8,7 +8,7 @@ exports.makePost = (req, res) => {
     console.log(req.body)
     //creating post object
     const post = new Post({
-        // creator: req.body.user, 
+        creator: req.body.creator, 
         body: req.body.body,
         favorites: 0,
         favoritedBy: [],
@@ -21,8 +21,9 @@ exports.makePost = (req, res) => {
         parentPost: null
     })
     //Find the user and add user as creator to the post
+    
         User.find({
-            username: { $in: req.body.creator }
+            _id: { $in: req.body.creator }
         }, (err, users) => {
             if (err) {
                 res.status(500).send({ message: err })
