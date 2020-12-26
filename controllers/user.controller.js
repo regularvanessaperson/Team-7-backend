@@ -1,7 +1,6 @@
-const db = require('../models/index')
-//Access to our db thorugh User and Role variable
-const User = db.user
-const Post = db.post
+
+const User = require("../models/user.model")
+
 
 exports.allAccess = (req, res)=>{
     res.status(200).send("public content")
@@ -14,6 +13,7 @@ exports.userBoard = (req, res) => {
 exports.adminBoard = (req, res) => {
     res.status(200).send("Admin content")
 }
+
 
 exports.follow = (req, res) => {
      User.findOne({"_id": req.body.currentUser}, async function (err, user) {
@@ -42,3 +42,14 @@ exports.unfollow = (req, res) => {
     })
     res.send("Unfollow successful")
 }
+
+//display user profile
+exports.userProfile = (req, res) => {
+    const id= req.body._id
+    User.find({_id: id}).then((user)=>{
+        if(!user)
+        return res.status(400).send({message: "Profile not found" })
+        else res.send(user)
+    })
+}
+
