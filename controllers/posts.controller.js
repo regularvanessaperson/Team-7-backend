@@ -73,6 +73,42 @@ exports.deletePost = (req,res) => {
     })
 }
 
+
+exports.userFollowing = (req, res) => {
+    
+    let userFollowingArray = []
+    
+    User.findById(req.body.creator, (err, user) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        }
+
+        userFollowingArray = user.followed
+        console.log(user)
+        console.log('USER FOLLOWING ARRAY -->', userFollowingArray)
+        console.log('USER FOLLOWING ARRAY LENGTH -->', userFollowingArray.length)
+    
+    }).then(() => {
+    
+    
+    if(userFollowingArray.length > 0) {
+        userFollowingArray.forEach(follower => 
+        Post.find({
+            creator: { $eq: follower }
+        })
+        )
+        res.send({message: 'Posts retrieved'})
+        //console.log(res)
+    } else {
+        console.log('USER FOLLOWING ARRAY LENGTH -->', userFollowingArray.length)
+        res.send({ message: 'You are not following anyone' })
+    }
+    }
+    )
+    
+}
+
 //route to display all posts "/api/posts/feed" 
 exports.allPosts = (req, res) => {
     Post.find()
@@ -97,4 +133,5 @@ exports.onePost = (req, res) => {
         else res.send(post)
     })
 }
+
 
