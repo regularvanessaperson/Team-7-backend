@@ -134,4 +134,6 @@ exports.onePost = (req, res) => {
     })
 }
 
-
+exports.retweetPost = (req, res) => {
+    res.send({message: "Retweet post created"})
+}

@@ -19,7 +19,7 @@ app.put("/api/posts/post", controller.editPost)
 //Delete a post
 app.delete("/api/posts/post", controller.deletePost)
 // //Post repost/retweet - should get original and display as retweet
-// app.post("/api/posts/retweet", controller.retweetPost)
+app.post("/api/posts/retweet", controller.retweetPost)
 // //Reply to post
 // app.post("/api/posts/reply", controller.replyToPost)
 
