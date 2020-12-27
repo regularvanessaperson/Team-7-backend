@@ -181,4 +181,12 @@ exports.retweetPost = (req, res) => {
             console.log(post)
             
         })
+        
+        //Increment repost count on parent post by 1
+        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}}, (err, post) => {
+            if (err) {
+                res.status(500).send({ message: err })
+                return
+            }
+        })
 }
