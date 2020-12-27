@@ -5,7 +5,6 @@ const Post = db.post
 
 //make a post
 exports.makePost = (req, res) => {
-    console.log(req.body)
     //creating post object
     const post = new Post({
         // creator: req.body.creator, 
@@ -21,19 +20,30 @@ exports.makePost = (req, res) => {
         parentPost: null
     })
 
+    //Reference the user as the creator of the new post
     post.creator.push(req.body.creator)
 
     //Find the user and add user as creator to the post
     User.findById(req.body.creator, (err, user) => {
         user.posts.push(post._id)
-        console.log(post)
+        user.save()
+    })
+    
+    //Testing to see if we are correctly referencing post ids
+    User.findById(req.body.creator).populate('posts').
+    exec((err, user) => {
+        if (err) {
+            console.log(err)
+            return
+        }
         console.log(user)
     })
 
+    //Save the new post
     post.save((err) => {
         if (err) {
             res.status(500).send({message: err})
-        } 
+        }
         res.send("Post created successfully.")
     })
     

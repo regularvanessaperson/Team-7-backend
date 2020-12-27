@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 const db = require('./models/index')
 const Role = db.role
 
+
 //connecting to our backend
 db.mongoose
 .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
