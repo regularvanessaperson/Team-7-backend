@@ -19,25 +19,34 @@ exports.follow = (req, res) => {
      User.findOne({"_id": req.body.currentUser}, async function (err, user) {
         if (!user.followed.includes(req.body.otherUserId)){
             await user.followed.push(req.body.otherUserId)
+            await user.save()
             console.log(user)
         }
     })
      User.findOne({"_id": req.body.otherUserId}, async function (err, user) {
         if (!user.followers.includes(req.body.currentUser)){
             await user.followers.push(req.body.currentUser)
+            await user.save()
             console.log(user)
+            res.send(user)
         }
     })
-    res.send("Follow successful")
+    
 }
 
 exports.unfollow = (req, res) => {
     User.findOne({"_id": req.body.currentUser}, async function (err, user) {
         await user.followed.pull(req.body.otherUserId)
+        user.save((err) => {
+            if (err) res.send(err)
+        })
         console.log(user)
     })
     User.findOne({"_id": req.body.otherUserId}, async function (err, user) {
         await user.followers.pull(req.body.currentUser)
+        user.save((err) => {
+            if (err) res.send(err)
+        })
         console.log(user)
     })
     res.send("Unfollow successful")
