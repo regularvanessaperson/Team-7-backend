@@ -45,11 +45,13 @@ exports.unfollow = (req, res) => {
 
 //display user profile
 exports.userProfile = (req, res) => {
-    const id= req.body._id
-    User.find({_id: id}).then((user)=>{
-        if(!user)
-        return res.status(400).send({message: "Profile not found" })
-        else res.send(user)
+    const id = req.body._id
+    User.find({_id: id}, (err, user) => {
+        if(err){
+            res.status(400).send({message: "Profile not found"})
+        } else {
+            res.send(user)
+        }
     })
 }
 
