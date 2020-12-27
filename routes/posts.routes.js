@@ -24,7 +24,7 @@ app.post("/api/posts/retweet", controller.retweetPost)
 // app.post("/api/posts/reply", controller.replyToPost)
 
 // View all posts from users as user is following
-app.get("/api/posts/feed/follow", controller.userFollowing)
+app.get("/api/posts/feed/:id", controller.userFollowing)
 //Retreive all of the posts to display on home
 app.get("/api/posts/feed", controller.allPosts)
 // //Retreive a single post 
