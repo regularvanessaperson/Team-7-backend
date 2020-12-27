@@ -8,7 +8,6 @@ exports.makePost = (req, res) => {
     console.log(req.body)
     //creating post object
     const post = new Post({
-
         // creator: req.body.creator, 
         body: req.body.body,
         favorites: 0,
@@ -21,31 +20,45 @@ exports.makePost = (req, res) => {
         isReply: false,
         parentPost: null
     })
+
+    post.creator.push(req.body.creator)
+
     //Find the user and add user as creator to the post
+    User.findById(req.body.creator, (err, user) => {
+        user.posts.push(post._id)
+        console.log(post)
+        console.log(user)
+    })
+
+    post.save((err) => {
+        if (err) {
+            res.status(500).send({message: err})
+        } 
+        res.send("Post created successfully.")
+    })
     
-        User.find({
-            _id: { $in: req.body.creator }
-        }, (err, users) => {
-            if (err) {
-                res.status(500).send({ message: err })
-                return
-            }
-            //set the reference to the user as the creator of post
-            post.creator = users.map(user => user._id)
-            //save post to database
-            post.save((err) => {
-                if (err) {
-                    res.status(500).send({message: err})
-                } 
-                res.send("Post created successfully.")
-            })
-            // console.log(req.body.user)
-            // console.log(req.body.hashtags)
-            console.log(post)
-            //when testing is done we need to 
-            // res.send(post)
-        })
-    
+        // User.find({
+        //     _id: { $in: req.body.creator }
+        // }, (err, users) => {
+        //     if (err) {
+        //         res.status(500).send({ message: err })
+        //         return
+        //     }
+        //     //set the reference to the user as the creator of post
+        //     post.creator = users.map(user => user._id)
+        //     //save post to database
+        //     post.save((err) => {
+        //         if (err) {
+        //             res.status(500).send({message: err})
+        //         } 
+        //         res.send("Post created successfully.")
+        //     })
+        //     // console.log(req.body.user)
+        //     // console.log(req.body.hashtags)
+        //     console.log(post)
+        //     //when testing is done we need to 
+        //     // res.send(post)
+        // })   
 }
 
 //edit post - to test add the _id of the post and update the post body
