@@ -73,7 +73,7 @@ exports.deletePost = (req,res) => {
     })
 }
 
-
+//route to get posts created by a user that current user follows
 exports.userFollowing = (req, res) => {
     
     let userFollowingArray = []
@@ -134,6 +134,51 @@ exports.onePost = (req, res) => {
     })
 }
 
+//route to create a retweet post
 exports.retweetPost = (req, res) => {
-    res.send({message: "Retweet post created"})
+    //res.send({message: "Retweet post created"})
+    console.log(req.body)
+    //create post object with isRepost set to true
+    const post = new Post({
+
+        creator: req.body.creator, 
+        body: req.body.body,
+        favorites: 0,
+        favoritedBy: [],
+        reposts: 0,
+        repostedBy: [],
+        replies: [],
+        hashtags: req.body.hashtags,
+        isRepost: true,
+        isReply: false,
+        parentPost: req.body.parentPost
+    })
+    //Find the user and add user as creator to the post
+    
+        User.find({
+            _id: { $in: req.body.creator }
+        }, (err, users) => {
+            if (err) {
+                res.status(500).send({ message: err })
+                return
+            }
+            //set the reference to the user as the creator of post
+            post.creator = users.map(user => user._id)
+            //save post to database
+            post.save((err) => {
+                if (err) {
+                    res.status(500).send({message: err})
+                } 
+                res.send("Post created successfully.")
+            })
+            //add post to user's post array on model
+            
+            users[0].posts.push(post._id)
+            console.log('USER INFO', users[0], post._id)
+            users[0].save()
+            // console.log(req.body.user)
+            // console.log(req.body.hashtags)
+            console.log(post)
+            
+        })
 }
