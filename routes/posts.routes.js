@@ -27,6 +27,7 @@ app.post("/api/posts/retweet", controller.retweetPost)
 app.get("/api/posts/feed/:id", controller.userFollowing)
 //Retreive all of the posts to display on home
 app.get("/api/posts/feed", controller.allPosts)
+
 // //Retreive a single post 
 app.get("/api/posts/:idx", controller.onePost)
 
