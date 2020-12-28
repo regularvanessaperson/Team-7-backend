@@ -127,7 +127,30 @@ exports.retweetPost = (req, res) => {
         parentPost: req.body.parentPost
     })
     //Find the user and add user as creator to the post
-    
+        User.findById(req.body.creator, (err, user) => {
+            if(err) {
+                res.status(500).send({message: err})
+                return
+            }
+            user.posts.push(post._id)
+        
+
+        post.save((err) => {
+            if (err) {
+                res.status(500).send({message: err})
+            } 
+            res.send("Post created successfully.")
+        })
+
+        user.save((err) => {
+            if (err) {
+                res.status(500).send({message: err})
+            } 
+            console.log("Retweet saved to user's posts array successfully.")
+        })
+        
+        })
+        /*
         User.find({
             _id: { $in: req.body.creator }
         }, (err, users) => {
@@ -154,9 +177,9 @@ exports.retweetPost = (req, res) => {
             console.log(post)
             
         })
-        
+        */
         //Increment repost count on parent post by 1
-        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}}, (err, post) => {
+        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}},(err, post) => {
             if (err) {
                 res.status(500).send({ message: err })
                 return
