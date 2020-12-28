@@ -23,6 +23,9 @@ app.post("/api/posts/retweet", controller.retweetPost)
 // //Reply to post
 // app.post("/api/posts/reply", controller.replyToPost)
 
+// View all of a user's favorited posts
+app.get("/api/posts/feed/favorites/:id",controller.favoritesFeed)
+
 // View all posts from users as user is following
 app.get("/api/posts/feed/:id", controller.userFollowing)
 //Retreive all of the posts to display on home

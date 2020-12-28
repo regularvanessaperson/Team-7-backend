@@ -207,3 +207,18 @@ exports.incrementFavorite = (req, res) => {
         res.send("Post added to User's favorite posts array")
     })
 }
+
+//retrieve a user's favorite posts to display in a favorites feed
+exports.favoritesFeed = (req, res) => {
+    //grab id from req.params
+    User.findById(req.params.id).
+    populate('favoritePosts').
+    populate('posts').
+    exec((error, posts) => {
+        if (error) {
+            res.status(500).send({ message: error })
+            return
+        }
+        res.send(posts)
+    })
+}
