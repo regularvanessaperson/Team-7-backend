@@ -30,7 +30,8 @@ app.get("/api/posts/feed", controller.allPosts)
 // //Retreive a single post 
 app.get("/api/posts/:idx", controller.onePost)
 
-
+// Increment favorite count of favorited post
+app.post("/api/posts/favorite",controller.incrementFavorite)
 
 }
 
