@@ -196,6 +196,14 @@ exports.incrementFavorite = (req, res) => {
             return
         } 
         console.log(req.body)
-        res.send("Favorite count increased by one, user added to favoritedBy array")
+        //res.send("Favorite count increased by one, user added to favoritedBy array")
+    })
+
+    User.findByIdAndUpdate(req.body.userId, {$push: {favoritePosts: req.body.id}},(err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        }
+        res.send("Post added to User's favorite posts array")
     })
 }
