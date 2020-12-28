@@ -186,3 +186,16 @@ exports.retweetPost = (req, res) => {
             }
         })
 }
+
+//increase favorite count of favorited post by one and user's id to favoritedPosts array on Post
+exports.incrementFavorite = (req, res) => {
+    Post.findByIdAndUpdate(req.body.id, {$inc: {favorites: 1}, $push: {favoritedBy: req.body.userId}}, 
+        (err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        } 
+        console.log(req.body)
+        res.send("Favorite count increased by one, user added to favoritedBy array")
+    })
+}
