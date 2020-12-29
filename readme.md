@@ -4,6 +4,7 @@ This repo is the backend for Billy, Nivedh, Ross, and Vanessa's group 3 project,
 This repo includes the models included in our app, the authentication our app uses, and the endpoints our app hits.
 
 # Link to Frontend Repo
+The frontend of our app can be found [here](https://github.com/SFX818/Team-7-frontend)
 
 # Link to Deployed API
 
