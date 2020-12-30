@@ -4,6 +4,7 @@ This repo is the backend for Billy, Nivedh, Ross, and Vanessa's group 3 project,
 This repo includes the models included in our app, the authentication our app uses, and the endpoints our app hits.
 
 # Link to Frontend Repo
+The frontend of our app can be found [here](https://github.com/SFX818/Team-7-frontend)
 
 # Link to Deployed API
 
@@ -13,12 +14,19 @@ This repo includes the models included in our app, the authentication our app us
 - You will need to have mongoDB installed on your computer
 
 # Approach and ERD
-The core functionality of our app involves a user making a post, so we began by defining how we wanted to associate posts and models.
+The core functionality of our app involves a user making a post, so we began by defining how we wanted to associate posts and models. [Here](https://lucid.app/lucidchart/invitations/accept/8a5ee3bc-9af1-4987-b8d1-c4cc620a7719) is a link to our ERD.
 
 # Tech Stack
-- React
-- Mongoose
-- MongoDB
+## Security and Authentication
+- bcrypt: securely stores user passwords
+- JSON Web Tokens: used to authorize users
+
+## Framework
+- Express: allows us to write routes that send/retrieve information from our database
+
+## Database
+- MongoDB: we used a non-relational database for our app because it provided us with more flexibility than a SQL database
+- Mongoose: allows our backend to communicate with our Mongo database
 
 # Routes
 Methods | URLs | Actions
