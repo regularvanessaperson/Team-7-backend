@@ -68,7 +68,7 @@ exports.signup = (req, res) => {
 }
 
 exports.signin = (req,res) =>{
-    console.log("fire")
+    console.log("signin is working")
     User.findOne({
         username: req.body.username
     })
