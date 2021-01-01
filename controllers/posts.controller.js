@@ -2,7 +2,6 @@ const db = require('../models/index')
 //Access to our db thorugh User and Role variable
 const User = db.user
 const Post = db.post
-
 //make a post
 exports.makePost = (req, res) => {
     //creating post object
@@ -45,32 +44,8 @@ exports.makePost = (req, res) => {
             res.status(500).send({message: err})
         }
         res.send("Post created successfully.")
-    })
-    
-        // User.find({
-        //     _id: { $in: req.body.creator }
-        // }, (err, users) => {
-        //     if (err) {
-        //         res.status(500).send({ message: err })
-        //         return
-        //     }
-        //     //set the reference to the user as the creator of post
-        //     post.creator = users.map(user => user._id)
-        //     //save post to database
-        //     post.save((err) => {
-        //         if (err) {
-        //             res.status(500).send({message: err})
-        //         } 
-        //         res.send("Post created successfully.")
-        //     })
-        //     // console.log(req.body.user)
-        //     // console.log(req.body.hashtags)
-        //     console.log(post)
-        //     //when testing is done we need to 
-        //     // res.send(post)
-        // })   
+    })  
 }
-
 //edit post - to test add the _id of the post and update the post body
 exports.editPost= (req, res) => {
     const id = req.body._id
@@ -82,8 +57,6 @@ exports.editPost= (req, res) => {
         else res.send(data)
     })
 }
-
-
 //delete post
 exports.deletePost = (req,res) => {
     const id = req.body._id
@@ -95,43 +68,22 @@ exports.deletePost = (req,res) => {
 
     })
 }
-
 //route to get posts created by a user that current user follows
 exports.userFollowing = (req, res) => {
-    
-    let userFollowingArray = []
-    
-    User.findById(req.body.creator, (err, user) => {
-        if (err) {
-            res.status(500).send({ message: err })
+
+    //grab id from req.params
+    User.findById(req.params.id).
+    populate('followed').
+    populate('posts').
+    exec((error, posts) => {
+        if (error) {
+            res.status(500).send({ message: error })
             return
         }
-
-        userFollowingArray = user.followed
-        console.log(user)
-        console.log('USER FOLLOWING ARRAY -->', userFollowingArray)
-        console.log('USER FOLLOWING ARRAY LENGTH -->', userFollowingArray.length)
-    
-    }).then(() => {
-    
-    
-    if(userFollowingArray.length > 0) {
-        userFollowingArray.forEach(follower => 
-        Post.find({
-            creator: { $eq: follower }
-        })
-        )
-        res.send({message: 'Posts retrieved'})
-        //console.log(res)
-    } else {
-        console.log('USER FOLLOWING ARRAY LENGTH -->', userFollowingArray.length)
-        res.send({ message: 'You are not following anyone' })
-    }
-    }
-    )
+        res.send(posts)
+    })
     
 }
-
 //route to display all posts "/api/posts/feed" 
 exports.allPosts = (req, res) => {
     Post.find()
@@ -144,7 +96,6 @@ exports.allPosts = (req, res) => {
         })
     })
 }
-
 //route to display one post only "/api/posts/:id"
 exports.onePost = (req, res) => {
     const id = req.params.idx
@@ -156,7 +107,6 @@ exports.onePost = (req, res) => {
         else res.send(post)
     })
 }
-
 //route to create a retweet post
 exports.retweetPost = (req, res) => {
     //res.send({message: "Retweet post created"})
@@ -177,7 +127,30 @@ exports.retweetPost = (req, res) => {
         parentPost: req.body.parentPost
     })
     //Find the user and add user as creator to the post
-    
+        User.findById(req.body.creator, (err, user) => {
+            if(err) {
+                res.status(500).send({message: err})
+                return
+            }
+            user.posts.push(post._id)
+        
+
+        post.save((err) => {
+            if (err) {
+                res.status(500).send({message: err})
+            } 
+            res.send("Post created successfully.")
+        })
+
+        user.save((err) => {
+            if (err) {
+                res.status(500).send({message: err})
+            } 
+            console.log("Retweet saved to user's posts array successfully.")
+        })
+        
+        })
+        /*
         User.find({
             _id: { $in: req.body.creator }
         }, (err, users) => {
@@ -204,12 +177,48 @@ exports.retweetPost = (req, res) => {
             console.log(post)
             
         })
-        
+        */
         //Increment repost count on parent post by 1
-        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}}, (err, post) => {
+        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}},(err, post) => {
             if (err) {
                 res.status(500).send({ message: err })
                 return
             }
         })
+}
+
+//increase favorite count of favorited post by one and user's id to favoritedPosts array on Post
+exports.incrementFavorite = (req, res) => {
+    Post.findByIdAndUpdate(req.body.id, {$inc: {favorites: 1}, $push: {favoritedBy: req.body.userId}}, 
+        (err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        } 
+        console.log(req.body)
+        //res.send("Favorite count increased by one, user added to favoritedBy array")
+    })
+
+    User.findByIdAndUpdate(req.body.userId, {$push: {favoritePosts: req.body.id}},(err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        }
+        res.send("Post added to User's favorite posts array")
+    })
+}
+
+//retrieve a user's favorite posts to display in a favorites feed
+exports.favoritesFeed = (req, res) => {
+    //grab id from req.params
+    User.findById(req.params.id).
+    populate('favoritePosts').
+    populate('posts').
+    exec((error, posts) => {
+        if (error) {
+            res.status(500).send({ message: error })
+            return
+        }
+        res.send(posts)
+    })
 }
