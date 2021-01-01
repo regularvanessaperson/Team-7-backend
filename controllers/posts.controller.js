@@ -127,30 +127,7 @@ exports.retweetPost = (req, res) => {
         parentPost: req.body.parentPost
     })
     //Find the user and add user as creator to the post
-        User.findById(req.body.creator, (err, user) => {
-            if(err) {
-                res.status(500).send({message: err})
-                return
-            }
-            user.posts.push(post._id)
-        
-
-        post.save((err) => {
-            if (err) {
-                res.status(500).send({message: err})
-            } 
-            res.send("Post created successfully.")
-        })
-
-        user.save((err) => {
-            if (err) {
-                res.status(500).send({message: err})
-            } 
-            console.log("Retweet saved to user's posts array successfully.")
-        })
-        
-        })
-        /*
+    
         User.find({
             _id: { $in: req.body.creator }
         }, (err, users) => {
@@ -177,48 +154,12 @@ exports.retweetPost = (req, res) => {
             console.log(post)
             
         })
-        */
+        
         //Increment repost count on parent post by 1
-        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}},(err, post) => {
+        Post.findByIdAndUpdate(req.body.parentPost, {$inc: {reposts: 1}}, (err, post) => {
             if (err) {
                 res.status(500).send({ message: err })
                 return
             }
         })
-}
-
-//increase favorite count of favorited post by one and user's id to favoritedPosts array on Post
-exports.incrementFavorite = (req, res) => {
-    Post.findByIdAndUpdate(req.body.id, {$inc: {favorites: 1}, $push: {favoritedBy: req.body.userId}}, 
-        (err, post) => {
-        if (err) {
-            res.status(500).send({ message: err })
-            return
-        } 
-        console.log(req.body)
-        //res.send("Favorite count increased by one, user added to favoritedBy array")
-    })
-
-    User.findByIdAndUpdate(req.body.userId, {$push: {favoritePosts: req.body.id}},(err, post) => {
-        if (err) {
-            res.status(500).send({ message: err })
-            return
-        }
-        res.send("Post added to User's favorite posts array")
-    })
-}
-
-//retrieve a user's favorite posts to display in a favorites feed
-exports.favoritesFeed = (req, res) => {
-    //grab id from req.params
-    User.findById(req.params.id).
-    populate('favoritePosts').
-    populate('posts').
-    exec((error, posts) => {
-        if (error) {
-            res.status(500).send({ message: error })
-            return
-        }
-        res.send(posts)
-    })
 }

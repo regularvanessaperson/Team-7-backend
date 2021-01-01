@@ -12,6 +12,7 @@ const User = mongoose.model(
         reposts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
         location: String,
+        locationId: String,
         birthday: Date,
         dateRegistered: Date,
         // profilePic: [],
