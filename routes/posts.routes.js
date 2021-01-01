@@ -22,7 +22,8 @@ app.delete("/api/posts/post", controller.deletePost)
 app.post("/api/posts/retweet", controller.retweetPost)
 // //Reply to post
 // app.post("/api/posts/reply", controller.replyToPost)
-
+// View all of a user's favorited posts
+app.get("/api/posts/feed/favorites/:id",controller.favoritesFeed)
 // View all posts from users as user is following
 app.get("/api/posts/feed/:id", controller.userFollowing)
 //Retreive all of the posts to display on home
@@ -30,7 +31,8 @@ app.get("/api/posts/feed", controller.allPosts)
 // //Retreive a single post 
 app.get("/api/posts/:idx", controller.onePost)
 
-
+// Increment favorite count of favorited post
+app.put("/api/posts/favorite",controller.incrementFavorite)
 
 }
 
