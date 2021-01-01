@@ -68,3 +68,14 @@ exports.userProfile = (req, res) => {
     })
 }
 
+//return all users
+exports.all = (req, res) => {
+    User.find().exec((err, users) => {
+        if (err) {
+            res.status(400).send({message: "Users not found"})
+        } else {
+            res.send(users)
+        }
+    })
+}
+

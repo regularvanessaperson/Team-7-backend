@@ -23,4 +23,6 @@ module.exports = function(app) {
     app.put("/api/user/follow", controller.follow)
     //Unfollow a user
     app.put("/api/user/unfollow", controller.unfollow)
+    //Return all users
+    app.get("/api/user/all", controller.all)
 }
