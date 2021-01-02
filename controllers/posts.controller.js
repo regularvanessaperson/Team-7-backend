@@ -73,8 +73,13 @@ exports.userFollowing = (req, res) => {
 
     //grab id from req.params
     User.findById(req.params.id).
-    populate('followed').
-    populate('posts').
+    populate( {
+        path: 'followed',
+        populate: {
+            path: 'posts',
+            model: 'Post'
+        }
+    }).
     exec((error, posts) => {
         if (error) {
             res.status(500).send({ message: error })
