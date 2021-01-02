@@ -24,6 +24,9 @@ exports.makePost = (req, res) => {
 
     //Find the user and add user as creator to the post
     User.findById(req.body.creator, (err, user) => {
+        if (err){
+            console.log(err)
+        }
         user.posts.push(post._id)
         user.save()
     })
