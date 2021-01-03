@@ -44,6 +44,7 @@ exports.unfollow = (req, res) => {
     })
     User.findOne({"_id": req.body.otherUserId}, async function (err, user) {
         await user.followers.pull(req.body.currentUser)
+        await user.followers.push('')
         user.save((err) => {
             if (err) res.send(err)
         })
