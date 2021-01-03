@@ -33,6 +33,8 @@ app.get("/api/posts/:idx", controller.onePost)
 
 // Increment favorite count of favorited post
 app.put("/api/posts/favorite",controller.incrementFavorite)
+// Decrease favorite count of a post by one and remove associated user
+app.put("/api/posts/decreaseFave", controller.decreaseFavorite)
 
 }
 

@@ -221,6 +221,27 @@ exports.incrementFavorite = (req, res) => {
     })
 }
 
+//increase favorite count of favorited post by one and user's id to favoritedPosts array on Post
+exports.decreaseFavorite = (req, res) => {
+    Post.findByIdAndUpdate(req.body.id, {$inc: {favorites: -1}, $pull: {favoritedBy: req.body.userId}}, 
+        (err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        } 
+        console.log(req.body)
+        //res.send("Favorite count decrease by one, user pulled from favoritedBy array")
+    })
+
+    User.findByIdAndUpdate(req.body.userId, {$pull: {favoritePosts: req.body.id}},(err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        }
+        res.send("Post removed from User's favorite posts array")
+    })
+}
+
 //retrieve a user's favorite posts to display in a favorites feed
 exports.favoritesFeed = (req, res) => {
     //grab id from req.params
