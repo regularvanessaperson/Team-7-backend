@@ -128,11 +128,21 @@ exports.onePost = (req, res) => {
         })
 }
 //route to create a retweet post
-exports.retweetPost = (req, res) => {
-    //res.send({message: "Retweet post created"})
+exports.retweetPost = async (req, res) => {
+
+    // RETWEET is assigning the NEW post 'repostedBy', need to set parent post repostedBy and isRepost to prevent user from retweeting same post multiple times
+    // NEW POST: parentPost username, parentPost id
+    // ORIGINAL POST: repostedBy
+    // in frontend, check to see if repostedBy contains currentUser.id, if so, do not display retweet button
+    // {if retweeted is true, do not render retweet button}
+    // increment number of retweets
+    // if number of retweeters is 3 or less, display full names
+    // if over 3, show number 
+    // if isRepost, replace delete button with unretweet
+
+
     //create post object with isRepost set to true
     const post = new Post({
-
         creator: req.body.creator,
         body: req.body.body,
         favorites: 0,
@@ -143,8 +153,10 @@ exports.retweetPost = (req, res) => {
         hashtags: req.body.hashtags,
         isRepost: true,
         isReply: false,
-        parentPost: req.body.parentPost
+        parentPost: req.body.parentPost,
+        originalCreator: req.body.originalCreator
     })
+
     //Find the user and add user as creator to the post
     User.findById(req.body.creator, (err, user) => {
         if (err) {
@@ -169,36 +181,68 @@ exports.retweetPost = (req, res) => {
         })
 
     })
-    /*
-        User.find({
-            _id: { $in: req.body.creator }
-        }, (err, users) => {
+
+    //Set respostedBy and isRepost of parent post
+    await Post.findById(req.body.parentPost, (error, p) => {
+        console.log("Parent Post id: ", req.body.parentPost)
+        let reposters = p.repostedBy
+        reposters.push(req.body.creator)
+        p.save((err) => {
             if (err) {
                 res.status(500).send({ message: err })
-                return
             }
-            //set the reference to the user as the creator of post
-            post.creator = users.map(user => user._id)
-            //save post to database
-            post.save((err) => {
-                if (err) {
-                    res.status(500).send({message: err})
-                } 
-                res.send("Post created successfully.")
-            })
-            //add post to user's post array on model
-            
-            users[0].posts.push(post._id)
-            console.log('USER INFO', users[0], post._id)
-            users[0].save()
-            // console.log(req.body.user)
-            // console.log(req.body.hashtags)
-            console.log(post)
-            
+
         })
-    */
+    })
+    
     //Increment repost count on parent post by 1
     Post.findByIdAndUpdate(req.body.parentPost, { $inc: { reposts: 1 } }, (err, post) => {
+        if (err) {
+            res.status(500).send({ message: err })
+            return
+        }
+    })
+}
+
+//unretweet post
+exports.unretweet = (req, res) => {
+
+    // req.body: userId, parentId, repostId
+    //need to delete the retweeted post, 
+    //remove the user from the retweetedBy field, 
+    //and remove the post from the users doc
+
+    //remove user from parentPost 'repostedBy'
+    Post.findById(req.body.parentId[0], (err, post) => {
+        if (err) {
+            console.log(err)
+            return
+        }
+        console.log('Post found')
+        post.repostedBy.pull(req.body.userId)
+        post.isRepost = false
+        post.save((error) => {
+            if (error) console.log(err)
+            console.log('Updated parent post')
+            console.log(post)
+        })
+        
+    })
+
+    //delete the post copy
+    Post.deleteOne({ _id: req.body.repostId })
+        .then((data) => {
+            if (!data) {
+                console.log("Can't find post")
+                return
+            }
+            else res.send(data)
+            console.log('post deleted')
+
+        })
+
+    //Increment repost count on parent post by 1
+    Post.findByIdAndUpdate(req.body.parentPost, { $inc: { reposts: -1 } }, (err, post) => {
         if (err) {
             res.status(500).send({ message: err })
             return
