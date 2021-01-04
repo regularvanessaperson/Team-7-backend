@@ -52,7 +52,7 @@ exports.makePost = (req, res) => {
 }
 //edit post - to test add the _id of the post and update the post body
 exports.editPost = (req, res) => {
-    const id = req.body._id
+    const id = req.body.id
     Post.updateOne({ _id: id }, {
         body: req.body.body
     }).then((data) => {
@@ -112,7 +112,6 @@ exports.allPosts = (req, res) => {
 //route to display one post only "/api/posts/:id"
 exports.onePost = (req, res) => {
     const id = req.params.idx
-    console.log(id)
     Post.find({ _id: id })
         .then((post) => {
             if (!post)
@@ -123,7 +122,6 @@ exports.onePost = (req, res) => {
 //route to create a retweet post
 exports.retweetPost = (req, res) => {
     //res.send({message: "Retweet post created"})
-    console.log(req.body)
     //create post object with isRepost set to true
     const post = new Post({
 
