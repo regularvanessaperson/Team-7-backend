@@ -20,6 +20,8 @@ app.put("/api/posts/post", controller.editPost)
 app.delete("/api/posts/post", controller.deletePost)
 // //Post repost/retweet - should get original and display as retweet
 app.post("/api/posts/retweet", controller.retweetPost)
+// unretweet
+app.put("/api/posts/unretweet", controller.unretweet)
 // //Reply to post
 app.post("/api/posts/reply", controller.replyToPost)
 // View all of a user's favorited posts
