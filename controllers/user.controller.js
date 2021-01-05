@@ -57,7 +57,14 @@ exports.userProfile = (req, res) => {
     User.findById(req.params.id).
     populate('followed').
     populate('followers').
-    populate('posts').
+    
+    populate({
+        path: 'posts',
+        populate: {
+            path: 'creator',
+            model: 'User'
+        }
+    }).
     exec((err, user) => {
         if(err){
             res.status(400).send({message: "Profile not found"})
