@@ -15,7 +15,7 @@ const User = mongoose.model(
         locationId: String,
         birthday: Date,
         dateRegistered: Date,
-        // profilePic: [],
+        profilePic: [{type: mongoose.Schema.Types.ObjectId, ref: 'Image'}],
         // bannerPic: [],
         roles: [
             {

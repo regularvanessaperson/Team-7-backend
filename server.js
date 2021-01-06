@@ -1,4 +1,5 @@
 const express = require('express')
+const fs = require('fs')
 const bodyParser = require('body-parser')
 const dbConfig = require('./config/db.config')
 const cors = require('cors')
@@ -46,6 +47,7 @@ require('./routes/auth.routes')(app)
 require('./routes/user.routes')(app)
 require('./routes/posts.routes')(app)
 require('./routes/twitter.routes')(app)
+require('./routes/image.routes')(app)
 
 //set prot, listen for request
 const PORT = process.env.PORT || 8080
