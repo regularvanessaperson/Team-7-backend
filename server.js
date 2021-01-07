@@ -6,6 +6,9 @@ const cors = require('cors')
 
 
 const app= express()
+
+require('dotenv').config()
+
 app.use(cors())
 
 //parse requests of content-type - application/json
@@ -18,11 +21,11 @@ app.use(bodyParser.urlencoded({extended: true}))
 //SETUP MONGOOSE
 const db = require('./models/index')
 const Role = db.role
-
+const dbURI = process.env.MONGODB_URI || `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
 
 //connecting to our backend
 db.mongoose
-.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+.connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
