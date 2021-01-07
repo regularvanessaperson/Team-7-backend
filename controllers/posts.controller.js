@@ -154,7 +154,8 @@ exports.retweetPost = async (req, res) => {
         isRepost: true,
         isReply: false,
         parentPost: req.body.parentPost,
-        originalCreator: req.body.originalCreator
+        originalCreator: req.body.originalCreator,
+        wasRepostedBy: req.body.creator
     })
 
     //Find the user and add user as creator to the post
