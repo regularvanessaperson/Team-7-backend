@@ -17,7 +17,8 @@ const Post = mongoose.model(
         isRepost: Boolean,
         isReply: Boolean,
         parentPost: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
-        originalCreator: String
+        originalCreator: String,
+        wasRepostedBy: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
         // media: []
     })
 )
