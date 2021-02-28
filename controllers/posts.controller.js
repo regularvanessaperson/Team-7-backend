@@ -69,7 +69,6 @@ exports.deletePost = (req, res) => {
             if (!data)
                 return res.status(400).send({ message: "Unable to delete post" })
             else res.send(data)
-
         })
 }
 //route to get posts created by a user that current user follows
